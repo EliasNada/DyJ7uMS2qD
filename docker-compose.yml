@@ -1,0 +1,19 @@
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: php-app
+        ports:
+            - "8080:80"
+
+    db_local:
+        image: mysql:8.0
+        container_name: mysql-db
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: laravel
+            MYSQL_USER: local_user
+            MYSQL_PASSWORD: local_password
