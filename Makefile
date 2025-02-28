@@ -14,10 +14,14 @@ run:
 
 .PHONY .SILENT:
 run-dev:
-	docker run -d -p 8080:80 --name php -v $(current_directory):/var/www/app php8.2
+	docker run -d -p 8080:80 --name php -v $(current_directory):/var/www/app app
 
 .PHONY .SILENT:
 run-docker:
 	docker compose up --build -d db_local
 	docker compose up --build -d app
-	docker compose run --rm app php artisan migrate
+	docker compose run --rm app php artisan passport:install --uuids --no-interaction
+
+.PHONY .SILENT:
+refresh:
+	docker compose up --build -d app

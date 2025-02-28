@@ -1,2 +1,5 @@
 vendor
 .env
+.rnd
+oauth-private.key
+oauth-public.key

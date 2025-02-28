@@ -31,6 +31,11 @@ RUN chmod -R 775 ./
 RUN composer clearcache
 RUN composer install --no-interaction # --no-dev
 
+RUN php artisan passport:keys
+
+RUN chown -R www-data:www-data ./storage
+RUN chmod -R 775 ./storage
+
 EXPOSE 80
 
 CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
