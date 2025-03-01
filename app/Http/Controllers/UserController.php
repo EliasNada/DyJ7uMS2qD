@@ -42,4 +42,15 @@ class UserController extends Controller
         $user->delete();
         return response()->json(null, 204);
     }
+
+    public function me(Request $request)
+    {
+        $user = $request->user();
+
+        if ($request->has('include')) {
+            $user->load(explode(',', $request->include));
+        }
+
+        return new UserResource($user);
+    }
 }

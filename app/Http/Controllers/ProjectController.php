@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\Attribute;
 use App\Models\AttributeValue;
 use App\Http\Resources\ProjectResource;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -115,5 +116,36 @@ class ProjectController extends Controller
             'like' => 'LIKE',
             default => '=',
         };
+    }
+
+    public function attachUser(Request $request, Project $project)
+    {
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id'
+        ]);
+
+        // Prevent duplicate assignments
+        if ($project->users()->where('user_id', $validated['user_id'])->exists()) {
+            return response()->json([
+                'message' => 'User is already assigned to this project'
+            ], 422);
+        }
+
+        $project->users()->attach($validated['user_id']);
+
+        return response()->json([
+            'message' => 'User assigned successfully',
+            'project' => new ProjectResource($project->load('users'))
+        ]);
+    }
+
+    public function detachUser(Project $project, User $user)
+    {
+        $project->users()->detach($user->id);
+
+        return response()->json([
+            'message' => 'User removed from project',
+            'project' => new ProjectResource($project->load('users'))
+        ]);
     }
 }

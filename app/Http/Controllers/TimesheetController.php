@@ -8,9 +8,15 @@ use App\Http\Resources\TimesheetResource;
 
 class TimesheetController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return TimesheetResource::collection(Timesheet::paginate());
+        $query = Timesheet::query();
+
+        if ($request->has('include')) {
+            $query->with(explode(',', $request->include));
+        }
+
+        return TimesheetResource::collection($query->paginate());
     }
 
     public function store(Request $request)
@@ -29,6 +35,7 @@ class TimesheetController extends Controller
 
     public function show(Timesheet $timesheet)
     {
+        $timesheet->load(['user', 'project']);
         return new TimesheetResource($timesheet);
     }
 

@@ -10,12 +10,12 @@ class TimesheetResource extends JsonResource
         return [
             'id' => $this->id,
             'task_name' => $this->task_name,
-            'date' => $this->date->toDateString(),
+            'date' => $this->date,
             'hours' => $this->hours,
             'user' => new UserResource($this->whenLoaded('user')),
             'project' => new ProjectResource($this->whenLoaded('project')),
-            'created_at' => $this->created_at->toDateTimeString(),
-            'updated_at' => $this->updated_at->toDateTimeString(),
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

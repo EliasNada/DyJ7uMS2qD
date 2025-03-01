@@ -23,7 +23,8 @@ class DatabaseSeeder extends Seeder
 //        ]);
 
         Project::factory(5)->create();
-        Attribute::factory(5)->create(['name' => 'department', 'type' => 'text']);
-        Attribute::factory(5)->create(['name' => 'start_date', 'type' => 'date']);
+        Attribute::factory(1)->create(['name' => 'department', 'type' => 'text']);
+        Attribute::factory(1)->create(['name' => 'start_date', 'type' => 'date']);
+        Attribute::factory(1)->create(['name' => 'end_date', 'type' => 'date']);
     }
 }
