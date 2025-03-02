@@ -13,9 +13,13 @@ class ProjectResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'status' => $this->status,
-            'attributes' => $this->attributeValues->mapWithKeys(fn($av) => [
+            'users' => UserResource::collection($this->whenLoaded('users')),
+            'timesheets' => TimesheetResource::collection($this->whenLoaded('timesheets')),
+            'attributes' => $this->attributeValues->mapWithKeys(fn ($av) => [
                 $av->attribute->name => $av->value
             ]),
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString()
         ];
     }
 }

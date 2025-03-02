@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TimesheetResource;
 use App\Models\Timesheet;
 use Illuminate\Http\Request;
-use App\Http\Resources\TimesheetResource;
 
 class TimesheetController extends Controller
 {
@@ -33,9 +33,11 @@ class TimesheetController extends Controller
         return new TimesheetResource($timesheet);
     }
 
-    public function show(Timesheet $timesheet)
+    public function show(Request $request, Timesheet $timesheet)
     {
-        $timesheet->load(['user', 'project']);
+        if ($request->has('include')) {
+            $timesheet->load(explode(',', $request->include));
+        }
         return new TimesheetResource($timesheet);
     }
 

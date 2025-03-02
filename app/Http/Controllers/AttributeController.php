@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AttributeResource;
 use App\Models\Attribute;
 use Illuminate\Http\Request;
-use App\Http\Resources\AttributeResource;
 
 class AttributeController extends Controller
 {
