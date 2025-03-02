@@ -12,34 +12,27 @@ use Illuminate\Support\Facades\Validator;
 
 class ProjectController extends Controller
 {
-//    public function index(Request $request)
-//    {
-//        $query = Project::query();
-//
-//        // Handle regular filters
-//        if ($request->has('filters')) {
-//            foreach ($request->input('filters') as $field => $conditions) {
-//                foreach ($conditions as $operator => $value) {
-//                    if (in_array($field, ['name', 'status'])) {
-//                        $query->where($field, $this->getOperator($operator), $value);
-//                    } else {
-//                        // Handle EAV filters
-//                        $query->whereHas('attributeValues', function ($q) use ($field, $operator, $value) {
-//                            $q->whereHas('attribute', function ($q) use ($field) {
-//                                $q->where('name', $field);
-//                            })->where('value', $this->getOperator($operator), $value);
-//                        });
-//                    }
-//                }
-//            }
-//        }
-//
-//        return ProjectResource::collection($query->paginate());
-//    }
-
     public function index(Request $request)
     {
-        $query = Project::query()->with('attributeValues.attribute');
+        $query = Project::query();
+
+        // Handle regular filters
+        if ($request->has('filters')) {
+            foreach ($request->input('filters') as $field => $conditions) {
+                foreach ($conditions as $operator => $value) {
+                    if (in_array($field, ['name', 'status'])) {
+                        $query->where($field, $this->getOperator($operator), $value);
+                    } else {
+                        // Handle EAV filters
+                        $query->whereHas('attributeValues', function ($q) use ($field, $operator, $value) {
+                            $q->whereHas('attribute', function ($q) use ($field) {
+                                $q->where('name', $field);
+                            })->where('value', $this->getOperator($operator), $value);
+                        });
+                    }
+                }
+            }
+        }
 
         if ($request->has('include')) {
             $query->with(explode(',', $request->include));
@@ -113,7 +106,6 @@ class ProjectController extends Controller
         if ($request->has('include')) {
             $project->load(explode(',', $request->include));
         }
-
         return new ProjectResource($project);
     }
 

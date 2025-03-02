@@ -9,13 +9,20 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return UserResource::collection(User::paginate());
+        $query = User::query();
+        if ($request->has('include')) {
+            $query->with(explode(',', $request->include));
+        }
+        return UserResource::collection($query->paginate());
     }
 
-    public function show(User $user)
+    public function show(Request $request, User $user)
     {
+        if ($request->has('include')) {
+            $user->load(explode(',', $request->include));
+        }
         return new UserResource($user);
     }
 

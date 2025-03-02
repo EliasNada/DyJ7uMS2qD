@@ -15,7 +15,7 @@ class ProjectResource extends JsonResource
             'status' => $this->status,
             'users' => UserResource::collection($this->whenLoaded('users')),
             'timesheets' => TimesheetResource::collection($this->whenLoaded('timesheets')),
-            'attributes' => $this->attributeValues->mapWithKeys(fn ($av) => [
+            'attributes' => $this->attributeValues->mapWithKeys(fn($av) => [
                 $av->attribute->name => $av->value
             ]),
             'created_at' => $this->created_at->toDateTimeString(),

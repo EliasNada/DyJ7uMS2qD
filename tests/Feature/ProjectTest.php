@@ -12,12 +12,6 @@ class ProjectTest extends TestCase
 {
     use RefreshDatabase, AuthenticatesUser;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        Attribute::factory()->create(['name' => 'department', 'type' => 'text']);
-    }
-
     public function test_create_project_with_attributes()
     {
         $response = $this->actingAsUser()->postJson('/api/projects', [
@@ -47,5 +41,11 @@ class ProjectTest extends TestCase
         ]);
 
         $response->assertJsonPath('attributes.department', 'Finance');
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        Attribute::factory()->create(['name' => 'department', 'type' => 'text']);
     }
 }

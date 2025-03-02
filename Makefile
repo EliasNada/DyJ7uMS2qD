@@ -17,7 +17,11 @@ run-dev:
 	docker run -d -p 8080:80 --name php -v $(current_directory):/var/www/app php8.2
 
 .PHONY .SILENT:
-run-docker:
+run-app:
 	docker compose up --build -d db_local
 	docker compose up --build -d app
 	docker compose run --rm app php artisan passport:install --uuids --no-interaction --force
+
+.PHONY .SILENT:
+seed-app:
+	docker compose run --rm app php artisan db:seed
